@@ -1,2 +1,7 @@
 Django==2.1.7
+django-filter==2.1.0
+djangorestframework==3.9.2
+djangorestframework-stubs==0.3.0
+Markdown==3.0.1
 pytz==2018.9
+uuid==1.30

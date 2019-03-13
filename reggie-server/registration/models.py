@@ -42,9 +42,10 @@ class RegistrationModel(AbstractModel):
     Connects a User to a Convention and adds reg metadata
     """
     user = models.ForeignKey(user.User, on_delete=models.CASCADE)
-    convention = models.ForeignKey(ConventionModel, on_delete=models.CASCADE)
+    convention = models.ForeignKey(ConventionModel, on_delete=models.CASCADE, related_name='registrations')
     is_accepted = models.BooleanField(default=False)
     is_pending = models.BooleanField(default=True)
+    notes = models.TextField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.is_accepted:
@@ -66,7 +67,7 @@ class PaymentModel(AbstractModel):
     registration = models.ForeignKey(RegistrationModel, on_delete=models.CASCADE, related_name="payments")
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date_registered = models.DateTimeField()
-    notes = models.TextField
+    notes = models.TextField(blank=True, null=True)
 
 
 class RegistrationAddinModel(AbstractModel):

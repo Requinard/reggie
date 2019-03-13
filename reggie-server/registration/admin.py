@@ -15,7 +15,7 @@ class PaymentInline(admin.StackedInline):
     verbose_name_plural = "Payments"
     classes = ['collapse', ]
 
-    fields = ('registration', ('amount', 'date_registered'))
+    fields = ('registration', ('amount', 'date_registered'), 'notes')
 
 
 class RegistrationAddinInline(admin.StackedInline):
@@ -55,7 +55,7 @@ class RegistrationAdmin(admin.ModelAdmin):
             'fields': ('user', 'convention')
         }),
         ("Registration Status", {
-            'fields': ('is_accepted', 'is_pending')
+            'fields': (('is_accepted', 'is_pending'), 'notes')
         }),
         metadata_fields,
     )
