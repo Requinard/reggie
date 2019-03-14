@@ -1,0 +1,29 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  backend:
+    build: reggie-server
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - PRODUCTION=1
+    volumes:
+      - backend-code:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  nginx:
+    build: reggie-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./reggie-app/build:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+volumes:
+  backend-code:
+  db-data:
