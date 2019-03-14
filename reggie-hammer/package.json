@@ -4,7 +4,8 @@
   "description": "Load testing for reggie-server and reggie-app",
   "main": "index.js",
   "scripts": {
-    "test": "artillery quick --count 100 -n 20 http://127.0.0.1:8000"
+    "quick": "artillery quick --count 100 -n 10 http://127.0.0.1:8000/api/conventions",
+    "test": "artillery run registration_test.yml"
   },
   "author": "",
   "license": "MIT",

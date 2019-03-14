@@ -1,0 +1,18 @@
+config:
+  target: 'http://localhost:8000/api'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 50
+      name: "Warm Up"
+    - duration: 10
+      arrivalRate: 1000
+      name: "Max Load"
+scenarios:
+  - flow:
+      - get:
+          url: "/"
+      - get:
+          url: "/conventions"
+      - get:
+          url: "/registrations"
