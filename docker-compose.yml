@@ -11,8 +11,6 @@ services:
       - PRODUCTION=1
     volumes:
       - backend-code:/code
-    ports:
-      - "8000:8000"
     depends_on:
       - db
   nginx:
