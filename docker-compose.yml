@@ -17,8 +17,6 @@ services:
       mode: global
     environment:
       - PRODUCTION=1
-    ports:
-      - "8000:8000"
     depends_on:
       - db
   nginx:
@@ -41,8 +39,6 @@ services:
       placement:
         constraints:
           - node.role == manager
-    ports:
-      - "9090:9090" #todo: remove public port for prometheus
     volumes:
       - prometheus-data:/prometheus
     depends_on:
@@ -55,8 +51,8 @@ services:
         constraints:
           - node.role == manager
     image: grafana/grafana:5.1.0
-    ports:
-      - "3000:3000" # todo: remove public port for grafana
+    environment:
+      GF_SERVER_ROOT_URL=/grafana:
     volumes:
       - grafana-data:/var/lib/grafana
     depends_on:
