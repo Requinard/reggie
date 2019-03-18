@@ -1,16 +1,20 @@
 config:
   target: 'http://localhost:8000/api'
+  phases:
+    - duration: 10
+      arrivalRate: 20
   payload:
-    # path is relative to the location of the test script
-    path: "./users.csv"
+    path: "users.csv"
     order: sequence
     fields:
       - "username"
       - "password"
-  scenarios:
-    - flow:
-        - post:
-            url: "/user/create"
-            json:
-              username: "{{ username }}"
-              password: "{{ password }}"
+      - "email"
+scenarios:
+  - flow:
+    - post:
+        url: "/users/"
+        json:
+          username: "{{ username }}"
+          password: "{{ password }}"
+          email: "{{email}}"

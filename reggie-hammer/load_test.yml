@@ -1,23 +1,39 @@
 config:
-  target: 'http://localhost:8000/api'
+  target: 'http://localhost:8000'
   payload:
-    path: users.csv
+    path: "users.csv"
+    order: sequence
     fields:
-      - username
-      - password
+      - "username"
+      - "password"
+      - "email"
   phases:
-    - duration: 60
-      arrivalRate: 10
-      rampTo: 50
-      name: "Warm Up"
     - duration: 10
-      arrivalRate: 100
-      name: "Max Load"
+      arrivalRate: 1
+      name: "Warm Up"
 scenarios:
   - flow:
+      - post:
+          url: "/api/auth/jwt"
+          json:
+            username: "{{ username }}"
+            password: "{{ password }}"
+          capture:
+            json: "$.token"
+            as: "token"
+      - log: "Token retrieved as  {{ username}}: {{ token }}"
       - get:
-          url: "/"
-      - get:
-          url: "/conventions"
-      - get:
-          url: "/registrations"
+          url: "/api/conventions/"
+          capture:
+            json: "$[0].url"
+            as: "url"
+          headers:
+            Bearer: "{{ token }}"
+      - log: "URL for {{ username}} is {{ url }}. Token {{ token }}"
+      - post:
+          url: "/api/registrations/"
+          json:
+          convention: "{{ url }}"
+          headers:
+            Bearer: "{{ token }}"
+

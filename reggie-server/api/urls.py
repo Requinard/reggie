@@ -14,6 +14,6 @@ router.register(r'payments', views.PaymentViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^user/jwt', obtain_jwt_token),
+    url(r'^auth/jwt', obtain_jwt_token),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
