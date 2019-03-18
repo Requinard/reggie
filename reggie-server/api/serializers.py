@@ -13,6 +13,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ('is_staff', 'is_superuser')
 
 
+class UserCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
+
+
 class ConventionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ConventionModel
