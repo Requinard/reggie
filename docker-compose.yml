@@ -2,26 +2,68 @@ version: '3'
 services:
   db:
     image: postgres
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
     volumes:
       - db-data:/var/lib/postgresql/data
   backend:
     build: reggie-server
+    image: requinard2/reggie-server
     command: python manage.py runserver 0.0.0.0:8000
+    deploy:
+      mode: global
     environment:
       - PRODUCTION=1
-    volumes:
-      - backend-code:/code
+    ports:
+      - "8000:8000"
     depends_on:
       - db
   nginx:
     build: reggie-nginx
+    image: requinard2/reggie-nginx
+    deploy:
+      mode: global
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./reggie-app/build:/usr/share/nginx/html:ro
     depends_on:
-      - backend
+      - "backend"
+      - "prometheus"
+      - "grafana"
+  prometheus:
+    build: reggie-prometheus
+    image: requinard2/reggie-prometheus
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    ports:
+      - "9090:9090" #todo: remove public port for prometheus
+    volumes:
+      - prometheus-data:/prometheus
+    depends_on:
+      - "backend"
+  grafana:
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    image: grafana/grafana:5.1.0
+    ports:
+      - "3000:3000" # todo: remove public port for grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - "prometheus"
 volumes:
   backend-code:
   db-data:
+  grafana-data:
+  prometheus-data:
