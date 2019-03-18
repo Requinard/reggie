@@ -28,12 +28,16 @@ scenarios:
             json: "$[0].url"
             as: "url"
           headers:
-            Bearer: "{{ token }}"
+            Authorization: "Bearer {{ token }}"
       - log: "URL for {{ username}} is {{ url }}. Token {{ token }}"
       - post:
           url: "/api/registrations/"
           json:
-          convention: "{{ url }}"
+            convention: "{{ url }}"
           headers:
-            Bearer: "{{ token }}"
+            Authorization: "Bearer {{ token }}"
+          capture:
+            json: "$.url"
+            as: reg
+      - log: "registered {{ username }} to reg {{ reg }}"
 
