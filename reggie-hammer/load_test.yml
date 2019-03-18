@@ -1,12 +1,17 @@
 config:
   target: 'http://localhost:8000/api'
+  payload:
+    path: users.csv
+    fields:
+      - username
+      - password
   phases:
     - duration: 60
       arrivalRate: 10
       rampTo: 50
       name: "Warm Up"
     - duration: 10
-      arrivalRate: 1000
+      arrivalRate: 100
       name: "Max Load"
 scenarios:
   - flow:

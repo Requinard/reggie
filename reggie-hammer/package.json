@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "quick": "artillery quick --count 100 -n 10 http://127.0.0.1:8000/api/conventions",
-    "test": "artillery run registration_test.yml"
+    "test": "artillery run load_test.yml",
+    "register_users": "artillery run register.yml"
   },
   "author": "",
   "license": "MIT",

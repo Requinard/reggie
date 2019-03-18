@@ -29,8 +29,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - ./reggie-app/build:/usr/share/nginx/html:ro
     depends_on:
       - "backend"
       - "prometheus"
