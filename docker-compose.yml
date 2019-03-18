@@ -48,7 +48,8 @@ services:
     volumes:
       - prometheus-data:/prometheus
     depends_on:
-      - "backend"
+      - backend
+      - cadvisor
   grafana:
     deploy:
       replicas: 1
@@ -62,6 +63,24 @@ services:
       - grafana-data:/var/lib/grafana
     depends_on:
       - "prometheus"
+  cadvisor:
+    image: google/cadvisor:latest
+    deploy:
+      mode: global
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    depends_on:
+      - redis
+  redis:
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    image: redis:latest
 volumes:
   backend-code:
   db-data:

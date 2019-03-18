@@ -5,6 +5,9 @@ from django.contrib.auth import models as user
 
 
 # Create your models here.
+from django_prometheus.models import ExportModelOperationsMixin
+
+
 class AbstractModel(models.Model):
     """
     Holds data that all classes should use
@@ -37,7 +40,7 @@ class ConventionModel(AbstractModel):
         return self.__unicode__()
 
 
-class RegistrationModel(AbstractModel):
+class RegistrationModel(ExportModelOperationsMixin('registration'), AbstractModel):
     """
     Connects a User to a Convention and adds reg metadata
     """
@@ -60,7 +63,7 @@ class RegistrationModel(AbstractModel):
         return "{0} @ {1} ({2})".format(self.user, self.convention, self.uuid)
 
 
-class PaymentModel(AbstractModel):
+class PaymentModel(ExportModelOperationsMixin('payment'), AbstractModel):
     """
     Registers a payment for a RegistrationModel
     """
@@ -70,7 +73,7 @@ class PaymentModel(AbstractModel):
     notes = models.TextField(blank=True, null=True)
 
 
-class RegistrationAddinModel(AbstractModel):
+class RegistrationAddinModel(ExportModelOperationsMixin('registation_addin'), AbstractModel):
     """
     Extra items that can be added to a registration
     """
