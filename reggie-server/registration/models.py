@@ -3,7 +3,6 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth import models as user
 
-
 # Create your models here.
 from django_prometheus.models import ExportModelOperationsMixin
 
@@ -49,6 +48,14 @@ class RegistrationModel(ExportModelOperationsMixin('registration'), AbstractMode
     is_accepted = models.BooleanField(default=False)
     is_pending = models.BooleanField(default=True)
     notes = models.TextField(null=True, blank=True)
+
+    membership_level = models.SmallIntegerField(default=0, choices=(
+        (0, "Attendee"),
+        (1, "Staff"),
+        (2, "Helper"),
+        (3, "Organisation"),
+        (4, "Director")
+    ))
 
     def save(self, *args, **kwargs):
         if self.is_accepted:

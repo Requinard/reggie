@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/reggie-app/reggie-app.iml" filepath="$PROJECT_DIR$/reggie-app/reggie-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/reggie-hammer/reggie-hammer.iml" filepath="$PROJECT_DIR$/reggie-hammer/reggie-hammer.iml" />
       <module fileurl="file://$PROJECT_DIR$/reggie-nginx/reggie-nginx.iml" filepath="$PROJECT_DIR$/reggie-nginx/reggie-nginx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reggie-prometheus/reggie-prometheus.iml" filepath="$PROJECT_DIR$/reggie-prometheus/reggie-prometheus.iml" />
       <module fileurl="file://$PROJECT_DIR$/reggie-server/reggie-server.iml" filepath="$PROJECT_DIR$/reggie-server/reggie-server.iml" />
     </modules>
   </component>

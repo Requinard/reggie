@@ -45,8 +45,8 @@ class ConventionAdmin(admin.ModelAdmin):
 
 @admin.register(models.RegistrationModel)
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'convention', 'is_accepted', 'is_pending')
-    list_filter = ('convention', 'is_accepted', 'is_pending', 'date_edited')
+    list_display = ('user', 'convention', 'is_accepted', 'is_pending', 'membership_level')
+    list_filter = ('convention', 'is_accepted', 'is_pending', 'date_edited', 'membership_level')
     inlines = [
         PaymentInline
     ]
@@ -55,7 +55,7 @@ class RegistrationAdmin(admin.ModelAdmin):
             'fields': ('user', 'convention')
         }),
         ("Registration Status", {
-            'fields': (('is_accepted', 'is_pending'), 'notes')
+            'fields': (('is_accepted', 'is_pending'), 'membership_level', 'notes')
         }),
         metadata_fields,
     )
