@@ -2,6 +2,7 @@ import uuid as uuid
 from datetime import datetime
 from django.db import models
 from django.contrib.auth import models as user
+from django.utils import timezone
 
 # Create your models here.
 from django_prometheus.models import ExportModelOperationsMixin
@@ -25,8 +26,10 @@ class ConventionModel(AbstractModel):
     Holds the data for a specific instance of a convention.
     """
     name = models.CharField(max_length=200)
-    con_start_time = models.DateTimeField()
-    con_reg_time = models.DateTimeField()
+    con_event_start_date = models.DateField()
+    con_event_close_date = models.DateField()
+    con_reg_start_time = models.DateTimeField()
+    con_reg_close_time = models.DateTimeField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def reg_is_open(self):
@@ -56,6 +59,9 @@ class RegistrationModel(ExportModelOperationsMixin('registration'), AbstractMode
         (3, "Organisation"),
         (4, "Director")
     ))
+
+    class Meta:
+        unique_together = ('user', 'convention')
 
     def save(self, *args, **kwargs):
         if self.is_accepted:

@@ -28,15 +28,16 @@ class RegistrationAddinInline(admin.StackedInline):
 
 @admin.register(models.ConventionModel)
 class ConventionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'con_start_time', 'con_reg_time', 'price', 'date_edited')
-    list_filter = ('con_start_time', 'con_reg_time', 'date_edited', 'date_created')
+    list_display = ('name', 'con_event_start_date', 'con_event_close_date', 'con_reg_start_time', 'price', 'date_edited')
+    list_filter = ('con_event_start_date', 'con_event_close_date', 'con_reg_start_time', 'con_reg_close_time', 'date_edited', 'date_created')
     inlines = [
         RegistrationAddinInline
     ]
 
     fieldsets = (
         ("Con Info", {
-            "fields": ('name', 'con_start_time', 'con_reg_time', 'price')
+            "fields": (
+            'name', ('con_event_start_date', 'con_event_close_date'), ('con_reg_start_time', 'con_reg_close_time'), 'price')
         }),
         metadata_fields,
     )

@@ -1,5 +1,6 @@
 # Serializers define the API representation.
 from django.contrib.auth.models import User
+from django.utils import timezone
 from rest_framework import serializers
 
 from registration import models
@@ -14,14 +15,16 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class ConventionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ConventionModel
-        fields = ('url', 'name', 'con_start_time', 'con_reg_time', 'price')
+        fields = (
+            'url', 'name', 'con_event_start_date', 'con_event_close_date', 'con_reg_start_time', 'con_reg_close_time',
+            'price')
 
 
 class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.RegistrationModel
-        fields = ('url', 'user', 'is_pending', 'is_accepted', 'addons', 'payments')
-        read_only_fields = ('payments',)
+        fields = ('url', 'convention', 'user', 'is_pending', 'is_accepted', 'addons', 'payments')
+        read_only_fields = ('payments', 'user', 'is_accepted', 'is_pending', 'payments')
 
 
 class RegistrationAddonSerializer(serializers.HyperlinkedModelSerializer):
