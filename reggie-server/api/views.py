@@ -1,8 +1,9 @@
 # ViewSets define the view behavior.
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions, status, filters
-from rest_framework.request import Request
 from rest_framework.response import Response
 from django.utils import timezone
 
@@ -10,7 +11,7 @@ from api import serializers
 from registration import models
 
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
 
@@ -18,6 +19,14 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class ConventionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.ConventionModel.objects.all()
     serializer_class = serializers.ConventionSerializer
+
+    @method_decorator(cache_page(60))
+    def list(self, request, *args, **kwargs):
+        """
+        List all conventions with theit opening and closing times
+        Cached for 60 seconds
+        """
+        return super(ConventionViewSet, self).list(request, args, kwargs)
 
 
 class RegistrationViewSet(viewsets.ModelViewSet):
@@ -59,6 +68,10 @@ class RegistrationViewSet(viewsets.ModelViewSet):
 class RegistrationAddonViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.RegistrationAddinModel.objects.all()
     serializer_class = serializers.RegistrationAddonSerializer
+
+    @method_decorator(cache_page(60))
+    def list(self, request, *args, **kwargs):
+        return super(RegistrationAddonViewSet, self).list(request, args, kwargs)
 
 
 class PaymentViewSet(viewsets.ReadOnlyModelViewSet):

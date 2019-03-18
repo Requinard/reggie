@@ -9,7 +9,8 @@ from registration import models
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'username', 'email', 'is_staff')
+        fields = ('url', 'username', 'email', 'is_staff', 'is_superuser', 'password')
+        read_only_fields = ('is_staff', 'is_superuser')
 
 
 class ConventionSerializer(serializers.HyperlinkedModelSerializer):
