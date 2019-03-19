@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
+    'djoser',
     'django_prometheus',
     'registration',
     'api'
@@ -144,7 +146,7 @@ STATIC_ROOT = '../reggie-nginx/static'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
@@ -158,12 +160,6 @@ REST_FRAMEWORK = {
     },
 }
 
-JWT_AUTH = {
-    'JWT_VERIFY_EXPIRATION': True,
-    'JWT_LEEWAY': 300,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=24),
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-    'JWT_ISSUER': 'reggie-server'
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }

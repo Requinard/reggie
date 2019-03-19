@@ -17,11 +17,6 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
 
-    def perform_create(self, serializer: serializers.UserSerializer):
-        user: User = serializer.save()
-        user.set_password(serializer.validated_data['password'])
-        user.save()
-
 
 class ConventionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.ConventionModel.objects.all()
