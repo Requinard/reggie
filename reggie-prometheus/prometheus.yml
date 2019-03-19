@@ -17,13 +17,13 @@ scrape_configs:
     metrics_path: '/stats/metrics'
     dns_sd_configs:
       - names:
-          - 'backend'
+          - 'tasks,backend'
         type: 'A'
         port: 8000
   - job_name: cadvisor
     scrape_interval: 5s
     dns_sd_configs:
       - names:
-          - 'cadvisor'
+          - 'tasks.cadvisor'
         type: 'A'
         port: 8080
