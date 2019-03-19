@@ -34,6 +34,8 @@ services:
   prometheus:
     build: reggie-prometheus
     image: requinard2/reggie-prometheus
+    ports:
+      - "9090:9090"
     deploy:
       replicas: 1
       placement:
