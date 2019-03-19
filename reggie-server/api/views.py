@@ -1,21 +1,16 @@
 # ViewSets define the view behavior.
-from django.contrib.auth.models import User
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.utils import timezone
-from django.contrib.auth.models import User
 
+import api.permissions
+import users.models
 from api import serializers
 from registration import models
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
 
 
 class ConventionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -87,3 +82,15 @@ class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return models.PaymentModel.objects.filter(registration__user=self.request.user)
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsAuthenticated, api.permissions.ProfileEditPermissions)
+    queryset = users.models.ProfileModel.objects.filter()
+    serializer_class = serializers.ProfileSerializer
+
+    @action(detail=False, methods=['get', ])
+    def me(self, *args, **kwargs):
+        profile = self.request.user.profile
+        serializer = self.get_serializer(profile, many=False)
+        return Response(serializer.data)

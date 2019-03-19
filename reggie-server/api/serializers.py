@@ -1,16 +1,9 @@
 # Serializers define the API representation.
 from django.contrib.auth.models import User
-from django.utils import timezone
 from rest_framework import serializers
 
+import users.models
 from registration import models
-
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'username', 'email', 'is_staff', 'is_superuser', 'password')
-        read_only_fields = ('is_staff', 'is_superuser')
 
 
 class UserCreationSerializer(serializers.ModelSerializer):
@@ -44,3 +37,13 @@ class PaymentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.PaymentModel
         fields = ('url', 'registration', 'amount', 'date_registered', 'notes')
+
+
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = users.models.ProfileModel
+        fields = (
+            'url', 'user', 'is_private_profile', 'address_street', 'address_postal_code', 'address_number',
+            'address_city', 'address_country', 'date_of_birth', 'gender', 'phone_number', 'shirt_size',
+            'profile_comments')
+        read_only_fields = ('user',)

@@ -5,11 +5,11 @@ from rest_framework.routers import DefaultRouter
 from api import views
 
 router = DefaultRouter(trailing_slash=True)
-router.register(r'users', views.UserViewSet)
 router.register(r'conventions', views.ConventionViewSet)
 router.register(r'registrations', views.RegistrationViewSet)
 router.register(r'addons', views.RegistrationAddonViewSet)
 router.register(r'payments', views.PaymentViewSet)
+router.register(r'profiles', views.ProfileViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

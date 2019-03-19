@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'djoser',
     'django_prometheus',
     'registration',
+    'users',
     'api'
 ]
 
