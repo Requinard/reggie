@@ -143,6 +143,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '../reggie-nginx/static'
 
+USE_X_FORWARDED_HOST = True
+
 ## Rest framework
 
 REST_FRAMEWORK = {
@@ -163,4 +165,13 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+DJOSER = {
+    "SEND_ACTIVATION_EMAIL": DEBUG,
+    "SEND_CONFIRMATION_EMAIL": DEBUG,
+    "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    "SET_PASSWORD_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    "LOGOUT_ON_PASSWORD_CHANGE": True,
 }
