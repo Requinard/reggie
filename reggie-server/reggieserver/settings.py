@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
-import datetime
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -153,23 +152,26 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
-    'DEFAULT_THROTTLE_CLASSES': (
+}
+
+if not DEBUG:
+    REST_FRAMEWORK['DEFAULT_THROTTLE_CLASSES'] = (
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle'
-    ),
-    'DEFAULT_THROTTLE_RATES': {
+    )
+
+    REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
         'anon': '100/day',
         'user': '1000/day'
-    },
-}
+    }
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 DJOSER = {
-    "SEND_ACTIVATION_EMAIL": DEBUG,
-    "SEND_CONFIRMATION_EMAIL": DEBUG,
+    "SEND_ACTIVATION_EMAIL": not DEBUG,
+    "SEND_CONFIRMATION_EMAIL": not DEBUG,
     "ACTIVATION_URL": "#/activate/{uid}/{token}",
     "SET_PASSWORD_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_RETYPE": True,

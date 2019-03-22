@@ -14,12 +14,12 @@ config:
 scenarios:
   - flow:
       - post:
-          url: "/api/auth/jwt"
+          url: "/api/auth/jwt/create"
           json:
             username: "{{ username }}"
             password: "{{ password }}"
           capture:
-            json: "$.token"
+            json: "$.access"
             as: "token"
       - log: "Token retrieved as  {{ username}}: {{ token }}"
       - get:

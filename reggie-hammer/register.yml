@@ -1,5 +1,5 @@
 config:
-  target: 'http://localhost:8000/api'
+  target: 'http://localhost:8000'
   phases:
     - duration: 10
       arrivalRate: 20
@@ -13,7 +13,7 @@ config:
 scenarios:
   - flow:
     - post:
-        url: "/users/"
+        url: "/api/auth/users/create"
         json:
           username: "{{ username }}"
           password: "{{ password }}"
