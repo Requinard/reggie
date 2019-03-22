@@ -6,5 +6,8 @@ docker push requinard2/reggie-server
 docker build -t requinard2/reggie-nginx reggie-nginx
 docker push requinard2/reggie-nginx
 
+docker build -t requinard2/reggie-grafana reggie-grafana
+docker push requinard2/reggie-grafana
+
 docker build -t requinard2/reggie-prometheus reggie-prometheus
 docker push requinard2/reggie-prometheus

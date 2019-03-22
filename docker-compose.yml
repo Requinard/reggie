@@ -52,7 +52,8 @@ services:
       placement:
         constraints:
           - node.role == manager
-    image: grafana/grafana:5.1.0
+    build: reggie-grafana
+    image: requinard2/reggie-grafana
     environment:
       GF_SERVER_ROOT_URL=/grafana:
     volumes:
@@ -70,6 +71,26 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     depends_on:
       - redis
+  node-exporter:
+    image: stefanprodan/swarmprom-node-exporter:v0.16.0
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /etc/hostname:/etc/nodename
+    command:
+      - '--path.sysfs=/host/sys'
+      - '--path.procfs=/host/proc'
+      - '--collector.textfile.directory=/etc/node-exporter/'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--no-collector.ipvs'
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
   redis:
     deploy:
       replicas: 1
