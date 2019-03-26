@@ -1,9 +1,7 @@
 import uuid as uuid
 from datetime import datetime
-from django.db import models
 from django.contrib.auth import models as user
-from django.utils import timezone
-
+from django.db import models
 # Create your models here.
 from django_prometheus.models import ExportModelOperationsMixin
 
@@ -32,6 +30,10 @@ class ConventionModel(AbstractModel):
     con_reg_close_time = models.DateTimeField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
+    # Switches
+    is_public = models.BooleanField(default=False)
+    uses_hotel_mode = models.BooleanField(default=False)
+
     def reg_is_open(self):
         return datetime.utcnow() >= self.con_reg_time
 
@@ -39,7 +41,10 @@ class ConventionModel(AbstractModel):
         return self.name
 
     def __str__(self):
-        return self.__unicode__()
+        return self.name
+
+    class Meta:
+        verbose_name = "Convention"
 
 
 class RegistrationModel(ExportModelOperationsMixin('registration'), AbstractModel):
@@ -75,6 +80,12 @@ class RegistrationModel(ExportModelOperationsMixin('registration'), AbstractMode
     def __unicode__(self):
         return "{0} @ {1} ({2})".format(self.user, self.convention, self.uuid)
 
+    def get_badge_number(self):
+        return RegistrationModel.objects.filter(convention=self.convention, date_created__lt=self.date_created).count()
+
+    class Meta:
+        verbose_name = "Registration"
+
 
 class PaymentModel(ExportModelOperationsMixin('payment'), AbstractModel):
     """
@@ -84,6 +95,10 @@ class PaymentModel(ExportModelOperationsMixin('payment'), AbstractModel):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date_registered = models.DateTimeField()
     notes = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Payment"
+        verbose_name_plural = "Payments"
 
 
 class RegistrationAddinModel(ExportModelOperationsMixin('registation_addin'), AbstractModel):
@@ -99,3 +114,57 @@ class RegistrationAddinModel(ExportModelOperationsMixin('registation_addin'), Ab
 
     def __str__(self):
         return "{0} @ {1} ({2})".format(self.name, self.convention, self.uuid)
+
+    class Meta:
+        verbose_name = "Registration Add-In"
+        verbose_name_plural = "Registration Add-Ins"
+
+
+class HotelModel(AbstractModel):
+    """
+    Holds data for a hotel
+    """
+    name = models.CharField(max_length=60, unique=True)
+    conventions = models.ManyToManyField(ConventionModel, blank=True, related_name="hotels")
+    is_public = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Hotel"
+
+
+class RoomModel(AbstractModel):
+    name = models.CharField(max_length=10, blank=True, null=True)
+    hotel = models.ForeignKey(HotelModel, related_name="rooms", on_delete=models.CASCADE)
+
+    type = models.SmallIntegerField(choices=(
+        (1, "regular"),
+        (2, "deluxe"),
+        (3, "junior suite"),
+        (4, "suite"),
+        (5, "penthouse"),
+    ))
+    capacity = models.CharField(max_length=6, choices=(
+        ('B', 'Single bed'),
+        ('BB', 'Double bed'),
+        ('B B', 'Two single beds'),
+        ('BB B', 'Double and Single bed'),
+        ('BB BB', 'Two double beds'),
+    ))
+    capacity_extra = models.PositiveSmallIntegerField(
+        default=0,
+        help_text="Extra capacity that can possibly be added to the room"
+    )
+
+    # Room Locking
+    is_locked = models.BooleanField(default=False)
+    is_public = models.BooleanField(default=False)
+    password = models.CharField(max_length=25, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Room"

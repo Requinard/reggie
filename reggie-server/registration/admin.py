@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from registration import models
 
 metadata_fields = ("Metadata", {
@@ -28,8 +29,11 @@ class RegistrationAddinInline(admin.StackedInline):
 
 @admin.register(models.ConventionModel)
 class ConventionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'con_event_start_date', 'con_event_close_date', 'con_reg_start_time', 'price', 'date_edited')
-    list_filter = ('con_event_start_date', 'con_event_close_date', 'con_reg_start_time', 'con_reg_close_time', 'date_edited', 'date_created')
+    list_display = (
+        'name', 'con_event_start_date', 'con_event_close_date', 'con_reg_start_time', 'price', 'date_edited')
+    list_filter = (
+        'con_event_start_date', 'con_event_close_date', 'con_reg_start_time', 'con_reg_close_time', 'date_edited',
+        'date_created')
     inlines = [
         RegistrationAddinInline
     ]
@@ -37,7 +41,8 @@ class ConventionAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Con Info", {
             "fields": (
-            'name', ('con_event_start_date', 'con_event_close_date'), ('con_reg_start_time', 'con_reg_close_time'), 'price')
+                'name', ('con_event_start_date', 'con_event_close_date'), ('con_reg_start_time', 'con_reg_close_time'),
+                'price')
         }),
         metadata_fields,
     )
@@ -87,3 +92,28 @@ class RegistrationAddinAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ('date_created', 'date_edited', 'uuid')
+
+
+@admin.register(models.HotelModel)
+class HotelAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+
+
+@admin.register(models.RoomModel)
+class RoomAdmin(admin.ModelAdmin):
+    list_display = ('name', 'hotel', 'type', 'capacity', 'is_locked')
+    search_fields = ('name',)
+    list_filter = ('hotel', 'hotel__conventions', 'is_locked', 'capacity', 'type')
+
+    fieldsets = (
+        ('Metadata', {
+            'fields': (('name', 'hotel'),)
+        }),
+        ('Capacity', {
+            'fields': ('type', ('capacity', 'capacity_extra'))
+        }),
+        ('Locks', {
+            'fields': (('is_locked', 'password'),)
+        })
+    )

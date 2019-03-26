@@ -14,7 +14,7 @@ from registration import models
 
 
 class ConventionViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = models.ConventionModel.objects.all()
+    queryset = models.ConventionModel.objects.filter(is_public=True)
     serializer_class = serializers.ConventionSerializer
 
     @method_decorator(cache_page(60))

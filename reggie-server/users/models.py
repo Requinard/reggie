@@ -58,6 +58,9 @@ class ProfileModel(models.Model):
     def __str__(self):
         return "{0}'s profile".format(self.user.username)
 
+    class Meta:
+        verbose_name = "Profile"
+
 
 @receiver(post_save, sender=User)
 def create_item(sender, instance, created, **kwargs):
