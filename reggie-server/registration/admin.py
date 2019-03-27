@@ -14,6 +14,7 @@ class RegistrationAddinInline(admin.StackedInline):
 
     classes = ["collapse", ]
 
+
 @admin.register(models.ConventionModel)
 class ConventionAdmin(admin.ModelAdmin):
     list_display = (
@@ -54,9 +55,6 @@ class RegistrationAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ('date_created', 'date_edited', 'uuid')
-
-
-
 
 
 @admin.register(models.RegistrationAddinModel)
