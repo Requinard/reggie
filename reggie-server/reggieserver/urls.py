@@ -20,5 +20,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     url('stats/', include('django_prometheus.urls')),
-    url('api/', include('api.urls'))
+    url('api/', include('api.urls')),
+    url('staff/', include('staff.urls'))
 ]
