@@ -57,6 +57,12 @@ class UserAdmin(BaseUserAdmin):
         WarningInline,
         BanInline
     ]
+    actions = [
+        'activate'
+    ]
+
+    def activate(self, request, queryset):
+        queryset.update(is_active=True)
 
 
 admin.site.unregister(User)

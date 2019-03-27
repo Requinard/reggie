@@ -22,6 +22,8 @@ SECRET_KEY = '(p2@(^vvt#rjqxc7-#s7sqql7l28=76p5nssesjuhmy46c@-^q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = "PRODUCTION" not in os.environ
+CACHE = "CACHE" in os.environ
+THROTTLE = "THROTTLE" in os.environ
 
 ALLOWED_HOSTS = ["0.0.0.0", "*"]
 
@@ -101,7 +103,7 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
-} if DEBUG else {
+} if CACHE else {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': '/tmp/django_cache',
@@ -157,7 +159,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-if not DEBUG:
+if THROTTLE:
     REST_FRAMEWORK['DEFAULT_THROTTLE_CLASSES'] = (
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle'

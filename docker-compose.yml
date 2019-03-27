@@ -19,6 +19,8 @@ services:
       mode: global
     environment:
       - PRODUCTION=1
+      - CACHE=1
+      - THROTTLE=1
     depends_on:
       - db
     networks:

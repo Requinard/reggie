@@ -1,5 +1,5 @@
 config:
-  target: 'http://localhost:8000'
+  target: 'http://116.203.152.53'
   payload:
     path: "users.csv"
     order: sequence
@@ -9,7 +9,7 @@ config:
       - "email"
   phases:
     - duration: 10
-      arrivalRate: 1
+      arrivalRate: 20
       name: "Warm Up"
 scenarios:
   - flow:
