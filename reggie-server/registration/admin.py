@@ -30,7 +30,7 @@ class ConventionAdmin(admin.ModelAdmin):
         ("Con Info", {
             "fields": (
                 'name', ('con_event_start_date', 'con_event_close_date'), ('con_reg_start_time', 'con_reg_close_time'),
-                'price')
+                'price', 'is_public')
         }),
         metadata_fields,
     )
