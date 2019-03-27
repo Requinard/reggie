@@ -2,6 +2,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
+import bookings.models
+import payments.models
 import users.models
 from registration import models
 
@@ -35,7 +37,7 @@ class RegistrationAddonSerializer(serializers.HyperlinkedModelSerializer):
 
 class PaymentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = models.PaymentModel
+        model = payments.models.PaymentModel
         fields = ('url', 'registration', 'amount', 'date_registered', 'notes')
 
 
@@ -47,3 +49,15 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
             'address_city', 'address_country', 'date_of_birth', 'gender', 'phone_number', 'shirt_size',
             'profile_comments')
         read_only_fields = ('user',)
+
+
+class HotelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = bookings.models.HotelModel
+        fields = '__all__'
+
+
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = bookings.models.RoomModel
+        fields = '__all__'

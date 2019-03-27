@@ -87,20 +87,6 @@ class RegistrationModel(ExportModelOperationsMixin('registration'), AbstractMode
         verbose_name = "Registration"
 
 
-class PaymentModel(ExportModelOperationsMixin('payment'), AbstractModel):
-    """
-    Registers a payment for a RegistrationModel
-    """
-    registration = models.ForeignKey(RegistrationModel, on_delete=models.CASCADE, related_name="payments")
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date_registered = models.DateTimeField()
-    notes = models.TextField(blank=True, null=True)
-
-    class Meta:
-        verbose_name = "Payment"
-        verbose_name_plural = "Payments"
-
-
 class RegistrationAddinModel(ExportModelOperationsMixin('registation_addin'), AbstractModel):
     """
     Extra items that can be added to a registration
@@ -118,53 +104,3 @@ class RegistrationAddinModel(ExportModelOperationsMixin('registation_addin'), Ab
     class Meta:
         verbose_name = "Registration Add-In"
         verbose_name_plural = "Registration Add-Ins"
-
-
-class HotelModel(AbstractModel):
-    """
-    Holds data for a hotel
-    """
-    name = models.CharField(max_length=60, unique=True)
-    conventions = models.ManyToManyField(ConventionModel, blank=True, related_name="hotels")
-    is_public = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return self.name
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = "Hotel"
-
-
-class RoomModel(AbstractModel):
-    name = models.CharField(max_length=10, blank=True, null=True)
-    hotel = models.ForeignKey(HotelModel, related_name="rooms", on_delete=models.CASCADE)
-
-    type = models.SmallIntegerField(choices=(
-        (1, "regular"),
-        (2, "deluxe"),
-        (3, "junior suite"),
-        (4, "suite"),
-        (5, "penthouse"),
-    ))
-    capacity = models.CharField(max_length=6, choices=(
-        ('B', 'Single bed'),
-        ('BB', 'Double bed'),
-        ('B B', 'Two single beds'),
-        ('BB B', 'Double and Single bed'),
-        ('BB BB', 'Two double beds'),
-    ))
-    capacity_extra = models.PositiveSmallIntegerField(
-        default=0,
-        help_text="Extra capacity that can possibly be added to the room"
-    )
-
-    # Room Locking
-    is_locked = models.BooleanField(default=False)
-    is_public = models.BooleanField(default=False)
-    password = models.CharField(max_length=25, null=True, blank=True)
-
-    class Meta:
-        verbose_name = "Room"

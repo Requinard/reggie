@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from payments.admin import PaymentInline
 from registration import models
 
 metadata_fields = ("Metadata", {
@@ -8,24 +9,10 @@ metadata_fields = ("Metadata", {
 })
 
 
-# Register your models here.
-class PaymentInline(admin.StackedInline):
-    model = models.PaymentModel
-
-    verbose_name = "Payment"
-    verbose_name_plural = "Payments"
-    classes = ['collapse', ]
-
-    fields = ('registration', ('amount', 'date_registered'), 'notes')
-
-
 class RegistrationAddinInline(admin.StackedInline):
     model = models.RegistrationAddinModel
 
-    verbose_name = "Registration Addin"
-    verbose_name_plural = "Registration Addins"
     classes = ["collapse", ]
-
 
 @admin.register(models.ConventionModel)
 class ConventionAdmin(admin.ModelAdmin):
@@ -69,10 +56,7 @@ class RegistrationAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created', 'date_edited', 'uuid')
 
 
-@admin.register(models.PaymentModel)
-class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('registration', 'amount', 'date_registered')
-    list_filter = ('date_registered', 'date_edited')
+
 
 
 @admin.register(models.RegistrationAddinModel)
@@ -92,28 +76,3 @@ class RegistrationAddinAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ('date_created', 'date_edited', 'uuid')
-
-
-@admin.register(models.HotelModel)
-class HotelAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name',)
-
-
-@admin.register(models.RoomModel)
-class RoomAdmin(admin.ModelAdmin):
-    list_display = ('name', 'hotel', 'type', 'capacity', 'is_locked')
-    search_fields = ('name',)
-    list_filter = ('hotel', 'hotel__conventions', 'is_locked', 'capacity', 'type')
-
-    fieldsets = (
-        ('Metadata', {
-            'fields': (('name', 'hotel'),)
-        }),
-        ('Capacity', {
-            'fields': ('type', ('capacity', 'capacity_extra'))
-        }),
-        ('Locks', {
-            'fields': (('is_locked', 'password'),)
-        })
-    )

@@ -9,6 +9,8 @@ from rest_framework.response import Response
 
 import api.permissions
 import users.models
+import payments.models
+import bookings.models
 from api import serializers
 from registration import models
 
@@ -74,7 +76,7 @@ class RegistrationAddonViewSet(viewsets.ReadOnlyModelViewSet):
 class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = serializers.PaymentSerializer
-    queryset = models.PaymentModel.objects.all()
+    queryset = payments.models.PaymentModel.objects.all()
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
 
     filterset_fields = ('registration', 'date_registered')
@@ -94,3 +96,16 @@ class ProfileViewSet(viewsets.ModelViewSet):
         profile = self.request.user.profile
         serializer = self.get_serializer(profile, many=False)
         return Response(serializer.data)
+
+
+class HotelViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = bookings.models.HotelModel.objects.filter(is_public=True)
+    serializer_class = serializers.HotelSerializer
+
+
+class RoomViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = bookings.models.RoomModel.objects.filter(is_public=True)
+    serializer_class = serializers.RoomSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('hotel', 'is_locked')
