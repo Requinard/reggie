@@ -23,8 +23,8 @@ class HotelModel(AbstractModel):
 
 
 class FloorModel(AbstractModel):
-    name = models.CharField(max_length=10)
-    hotel = models.ForeignKey(HotelModel, related_name="floors", on_delete=models.CASCADE),
+    name = models.CharField(max_length=40)
+    hotel = models.ForeignKey(HotelModel, related_name="floors", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Floor"

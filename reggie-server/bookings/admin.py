@@ -4,11 +4,11 @@ from django.contrib import admin
 from bookings import models
 
 
-class FloorInline(admin.StackedInline):
+class FloorInline(admin.TabularInline):
     model = models.FloorModel
 
 
-class RoomInline(admin.StackedInline):
+class RoomInline(admin.TabularInline):
     model = models.RoomModel
 
 
@@ -16,6 +16,12 @@ class RoomInline(admin.StackedInline):
 class HotelAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
+
+    inlines = [
+        FloorInline
+    ]
+
+
 
 
 @admin.register(models.RoomModel)
@@ -39,4 +45,6 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(models.FloorModel)
 class FloorAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        RoomInline
+    ]
