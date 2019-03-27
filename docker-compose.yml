@@ -9,6 +9,8 @@ services:
           - node.role == manager
     volumes:
       - db-data:/var/lib/postgresql/data
+    networks:
+      - database
   backend:
     build: reggie-server
     image: requinard2/reggie-server
@@ -19,6 +21,10 @@ services:
       - PRODUCTION=1
     depends_on:
       - db
+    networks:
+      - database
+      - ingress
+      - monitoring
   nginx:
     build: reggie-nginx
     image: requinard2/reggie-nginx
@@ -31,6 +37,8 @@ services:
       - "backend"
       - "prometheus"
       - "grafana"
+    networks:
+      - ingress
   prometheus:
     build: reggie-prometheus
     image: requinard2/reggie-prometheus
@@ -46,6 +54,8 @@ services:
     depends_on:
       - backend
       - cadvisor
+    networks:
+      - monitoring
   grafana:
     deploy:
       replicas: 1
@@ -60,6 +70,9 @@ services:
       - grafana-data:/var/lib/grafana
     depends_on:
       - "prometheus"
+    networks:
+      - ingress
+      - monitoring
   cadvisor:
     image: google/cadvisor:latest
     deploy:
@@ -69,8 +82,8 @@ services:
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
-    depends_on:
-      - redis
+    networks:
+      - monitoring
   node-exporter:
     image: stefanprodan/swarmprom-node-exporter:v0.16.0
     volumes:
@@ -91,15 +104,19 @@ services:
           memory: 128M
         reservations:
           memory: 64M
-  redis:
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
-    image: redis:latest
+    networks:
+      - monitoring
 volumes:
   backend-code:
   db-data:
   grafana-data:
   prometheus-data:
+networks:
+  ingress:
+    driver: overlay
+  database:
+    driver: overlay
+    internal: true
+  monitoring:
+    driver: overlay
+    internal: true
