@@ -21,6 +21,7 @@ services:
       - PRODUCTION=1
       - CACHE=1
       - THROTTLE=1
+      - MUST_ACTIVATE=1
     depends_on:
       - db
     networks:

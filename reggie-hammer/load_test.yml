@@ -9,7 +9,7 @@ config:
       - "email"
   phases:
     - duration: 10
-      arrivalRate: 20
+      arrivalRate: 4  0
       name: "Warm Up"
 scenarios:
   - flow:

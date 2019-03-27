@@ -24,6 +24,7 @@ SECRET_KEY = '(p2@(^vvt#rjqxc7-#s7sqql7l28=76p5nssesjuhmy46c@-^q'
 DEBUG = "PRODUCTION" not in os.environ
 CACHE = "CACHE" in os.environ
 THROTTLE = "THROTTLE" in os.environ
+MUST_ACTIVATE = "MUST_ACTIVATE" in os.environ
 
 ALLOWED_HOSTS = ["0.0.0.0", "*"]
 
@@ -175,8 +176,8 @@ SIMPLE_JWT = {
 }
 
 DJOSER = {
-    "SEND_ACTIVATION_EMAIL": not DEBUG,
-    "SEND_CONFIRMATION_EMAIL": not DEBUG,
+    "SEND_ACTIVATION_EMAIL": MUST_ACTIVATE,
+    "SEND_CONFIRMATION_EMAIL": not MUST_ACTIVATE,
     "ACTIVATION_URL": "#/activate/{uid}/{token}",
     "SET_PASSWORD_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
