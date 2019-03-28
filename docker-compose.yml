@@ -17,6 +17,9 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     deploy:
       mode: global
+      placement:
+        constraints:
+          - node.role != manager
     environment:
       - PRODUCTION=1
       - CACHE=1
@@ -33,6 +36,9 @@ services:
     image: requinard2/reggie-nginx
     deploy:
       mode: global
+      placement:
+        constraints:
+          - node.role != manager
     ports:
       - "80:80"
       - "443:443"
