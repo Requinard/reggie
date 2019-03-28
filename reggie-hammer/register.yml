@@ -1,5 +1,5 @@
 config:
-  target: 'http://116.203.152.53'
+  target: 'http://116.203.62.161'
   phases:
     - duration: 40
       arrivalRate: 10
