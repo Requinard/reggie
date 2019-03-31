@@ -13,7 +13,7 @@ class AbstractModel(models.Model):
     # Metadata
     date_created = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(auto_now=True)
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
     class Meta:
         abstract = True
@@ -85,6 +85,11 @@ class RegistrationModel(ExportModelOperationsMixin('registration'), AbstractMode
 
     class Meta:
         verbose_name = "Registration"
+        indexes = [
+            models.Index(fields=['id', 'user']),
+            models.Index(fields=['id', ]),
+            models.Index(fields=['user', ])
+        ]
 
 
 class RegistrationAddinModel(ExportModelOperationsMixin('registation_addin'), AbstractModel):

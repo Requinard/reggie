@@ -22,10 +22,10 @@ class ConventionSerializer(serializers.HyperlinkedModelSerializer):
             'price')
 
 
-class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
+class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RegistrationModel
-        fields = ('url', 'convention', 'user', 'is_pending', 'is_accepted')
+        fields = ('url', 'convention', 'convention', 'user', 'is_pending', 'is_accepted')
         read_only_fields = ('payments', 'user', 'is_accepted', 'is_pending')
 
 

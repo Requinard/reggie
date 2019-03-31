@@ -1,4 +1,5 @@
 # ViewSets define the view behavior.
+from django.core.cache import cache
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -8,9 +9,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 import api.permissions
-import users.models
-import payments.models
 import bookings.models
+import payments.models
+import users.models
 from api import serializers
 from registration import models
 
@@ -18,14 +19,6 @@ from registration import models
 class ConventionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.ConventionModel.objects.filter(is_public=True)
     serializer_class = serializers.ConventionSerializer
-
-    @method_decorator(cache_page(60))
-    def list(self, request, *args, **kwargs):
-        """
-        List all conventions with theit opening and closing times
-        Cached for 60 seconds
-        """
-        return super(ConventionViewSet, self).list(request, args, kwargs)
 
 
 class RegistrationViewSet(viewsets.ModelViewSet):
@@ -37,7 +30,7 @@ class RegistrationViewSet(viewsets.ModelViewSet):
         now = timezone.now()
         serializer = serializers.RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        convention = serializer.validated_data.get('convention')
+        convention = cache.get_or_set(request.data['convention'], serializer.validated_data.get('convention'))
 
         if now <= convention.con_reg_start_time:
             return Response("The convention registration has not yet opened.", status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -69,8 +62,8 @@ class RegistrationAddonViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.RegistrationAddonSerializer
 
     @method_decorator(cache_page(60))
-    def list(self, request, *args, **kwargs):
-        return super(RegistrationAddonViewSet, self).list(request, args, kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        return super(RegistrationAddonViewSet, self).dispatch(request, args, kwargs)
 
 
 class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
