@@ -10,13 +10,16 @@ import staff.serializers
 
 
 class StaffRegistrationViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Manage users registrations by accepting or rejecting them from the convention
+    """
     serializer_class = staff.serializers.StaffRegistrationSerializer
     queryset = registration.models.RegistrationModel.objects.all()
     permission_classes = (permissions.IsAdminUser,)
 
     filter_backends = (DjangoFilterBackend,)
 
-    filterset_fields = ('convention', 'is_pending', 'is_accepted')
+    filterset_fields = ('convention', 'is_pending', 'is_accepted', 'user')
 
     @action(detail=True, methods=['GET', 'POST'])
     def accept(self, request, *args, **kwargs):
@@ -46,6 +49,7 @@ class StaffRegistrationViewSet(viewsets.ReadOnlyModelViewSet):
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = staff.serializers.UserSerializer
     queryset = User.objects.all()
+    permission_classes = (permissions.IsAdminUser,)
 
     def get_serializer_class(self):
         if self.action == 'warn':
