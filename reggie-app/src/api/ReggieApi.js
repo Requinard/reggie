@@ -1,15 +1,17 @@
 import axios from 'axios';
 
 class ReggieApi {
-  URL = 'localhost:8000/api/'
+  constructor(){
+    this.URL = 'localhost:8000/api/'
+  }
 
   getConventions() {
-    return axios.get(this.URL + 'conventions')
+    return axios.get(this.getUrl() + 'conventions')
   }
 
   postAuthUserRegister(username, password, email) {
     return axios.post(
-      this.URL + 'auth/users/create',
+      this.getUrl() + 'auth/users/create',
       {
         username,
         password,
@@ -20,7 +22,7 @@ class ReggieApi {
 
   postAuthJwtCreate(username, password) {
     return axios.post(
-      this.URL + 'auth/jwt/create',
+      this.getUrl() + 'auth/jwt/create',
       {
         username,
         password
