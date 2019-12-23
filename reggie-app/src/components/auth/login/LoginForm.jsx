@@ -16,6 +16,9 @@ const LoginForm = (props) => {
       <div>
         <Field name="remember" component={Checkbox} defaultChecked={true} label="Remember me?"/>
       </div>
+      <div>
+        <Field type="tet"/>
+      </div>
       <br/>
       <div>
         <Button variant="contained" color="secondary"

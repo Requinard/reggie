@@ -6,10 +6,14 @@ import reducers from './reducers/index';
 import Overview from "./components/overview";
 import thunk from 'redux-thunk';
 import AppRouter from "./AppRouter";
+import { createLogger } from 'redux-logger'
 
+const logger = createLogger({
+
+})
 const store = createStore(
   reducers,
-  applyMiddleware(thunk)
+  applyMiddleware(thunk, logger),
 );
 
 class App extends Component {

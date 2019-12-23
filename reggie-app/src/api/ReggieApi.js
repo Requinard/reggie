@@ -6,12 +6,12 @@ class ReggieApi {
   }
 
   getConventions() {
-    return axios.get(this.getUrl() + 'conventions')
+    return axios.get(this.URL + 'conventions')
   }
 
   postAuthUserRegister(username, password, email) {
     return axios.post(
-      this.getUrl() + 'auth/users/create',
+      this.URL + 'auth/users/create',
       {
         username,
         password,
@@ -21,8 +21,10 @@ class ReggieApi {
   }
 
   postAuthJwtCreate(username, password) {
+    console.log("Logging in", username, password);
+    console.log(this.URL + 'auth/jwt/create')
     return axios.post(
-      this.getUrl() + 'auth/jwt/create',
+      this.URL + 'auth/jwt/create',
       {
         username,
         password

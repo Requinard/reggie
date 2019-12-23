@@ -1,6 +1,9 @@
 import React from 'react'
-import {withStyles, Paper, Typography} from '@material-ui/core'
+import {Divider, Paper, Typography, withStyles} from '@material-ui/core'
 import LoginForm from "./LoginForm";
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {login} from '../../../actions/login'
 
 const styles = theme => ({
   main: {
@@ -21,33 +24,59 @@ const styles = theme => ({
     alignItems: 'center',
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
   },
-})
+});
 
 class LoginComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onSubmit = (values) => {
-      console.log(values);
-    };
-
     this.register = () => {
       this.props.history.push('/auth/register/')
     }
   }
+
+  handleSubmit = (values) => this.props.login(values)
+    .then(() => console.log("yes"))
+    .catch(() => console.error("no"))
+
   render() {
-    const { classes } = this.props;
+    const {classes} = this.props;
     return (
       <div className={classes.main}>
         <Paper className={classes.paper}>
           <Typography variant="h4">
             Welcome to Reggie
           </Typography>
-          <LoginForm onSubmit={this.onSubmit} register={this.register} />
+          <Divider/>
+          <LoginForm onSubmit={this.handleSubmit} register={this.register}/>
         </Paper>
       </div>
     )
   }
 }
 
-export default withStyles(styles)(LoginComponent)
+LoginComponent.propTypes = {
+  login: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool
+};
+
+function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.login.isLoggedIn
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    login: values => {
+      dispatch(login(values))
+    }
+  }
+}
+
+const ReduxLoginComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginComponent)
+
+export default withStyles(styles)(ReduxLoginComponent)
